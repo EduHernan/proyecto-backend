@@ -11,7 +11,7 @@ productos.listar();
 // creo una app de tipo express
 const app = express();
 const router = express.Router();
-app.use(express.static('public'));
+app.use('/static', express.static(__dirname + '/public'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
@@ -42,23 +42,38 @@ router.get('/productos/listar/:id', (req, res) => {
 router.post('/productos/guardar', (req, res) => {
     productos.guardar('conejo', 111, 'conejo.jpg');
     const info = productos.array
-    // let objeto = req.body;  
-    //  info.push(objeto)
+    
     
     res.json(info)
 })
 
-router.put('/productos/guardar', (req, res) => {
-    productos.guardar('conejo', 111, 'conejo.jpg');
+router.post('/productos/guardarForm', (req, res) => {
+    
     const info = productos.array
-    // let objeto = req.body;  
-    //  info.push(objeto)
+    let dataForm = req.body;  
+    dataForm.id = productos.array.length+1
+    info.push(dataForm)
     
     res.json(info)
 })
 
-router.delete('/productos/borrar/:id', (req, res) => {
-    console.log('exito')
+
+
+router.put('/productos/actualizar/:id', (req, res) => {
+    
+    const info = productos.array
+    let infoID = info[req.params.id-1]
+    infoID = req.body
+    console.log(infoID)
+    
+    
+    res.json({estado:'actualizado', info:infoID, id:req.params.id})
+})
+
+router.delete('/productos/borrar/:id', (req, res) => {  
+    
+    const info = productos.array
+    console.log('eliminado')
 
     res.json({estado:'borrado', id:req.params.id})
 })
