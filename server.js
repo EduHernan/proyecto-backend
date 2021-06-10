@@ -21,27 +21,40 @@ const puerto = 8080;
 
 router.get('/productos/listar', (req, res) => {
     
+    if (productos.array.length < 1 ) {
+        res.json({error: 'no hay productos cargados'});
+    } else {
+        console.log(productos)
     
-    console.log(productos)
     
-    
-    res.json({productos:productos.array});
+        res.json({productos:productos.array});
+    }
 
 })
 
 router.get('/productos/listar/:id', (req, res) => {
     const info = productos.array
     const infoID = info[req.params.id-1]
-    console.log(infoID)
     
     
-    res.json({producto:infoID});
+    if (infoID === undefined ) {
+        res.json({error: 'producto no encontrado'});
+        
+        
+    } else {
+        console.log(infoID)
+    
+    
+        res.json({producto:infoID});
+    }
+    
 
 })
 
 router.post('/productos/guardar', (req, res) => {
     productos.guardar('conejo', 111, 'conejo.jpg');
     const info = productos.array
+    console.log(info)
     
     
     res.json(info)
