@@ -1,10 +1,11 @@
 const express = require('express');
 const productos = require('./api/productos');
+const handlebars = require('express-handlebars');
 
-
-productos.guardar('perro', 211, 'perro.jpg');
-productos.guardar('gato', 311, 'gato.jpg');
-productos.guardar('tortuga', 450, 'tortuga.jpg');
+// ejecuto las funciones de la clase
+productos.guardar('Adidas Energifalcon', 8490, '/static/adidas-energyfalcon.jpg');
+productos.guardar('Adidas X9000L2 ', 7990, '/static/Zapatillas_X9000L2.jpg');
+productos.guardar('Adidas Superstar', 9490, '/static/Zapatillas_Superstar_Blanco.jpg');
     
 productos.listar();
 
@@ -16,12 +17,41 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 
+// configuracion de handlebars en express
+app.engine('hbs', handlebars({
+    extname: '.hbs',
+    defaultLayout: 'index.hbs',
+    layoutsDir: __dirname + '/views/layouts',
+}));
+
+// seteo el motor de plantilla
+app.set('view engine', 'hbs');
+
+app.set('views', './views');
+
 // pongo a escuchar el servidor en el puerto indicado
 const puerto = 8080;
+
+// haciendo get de las rutas
+
+router.get('/productos/vista', (req, res) => {
+    if (productos.array.length < 1 ) {
+        
+        res.render('main', { productos: productos.array, hayProductos: false });
+    } else {
+        console.log(productos)
+    
+    
+        res.render('main', { productos: productos.array, hayProductos: true });
+    }
+    
+    
+}); 
 
 router.get('/productos/listar', (req, res) => {
     
     if (productos.array.length < 1 ) {
+        
         res.json({error: 'no hay productos cargados'});
     } else {
         console.log(productos)
@@ -90,6 +120,8 @@ router.delete('/productos/borrar/:id', (req, res) => {
 
     res.json({estado:'borrado', id:req.params.id})
 })
+
+
 
 app.use('/api', router);
 

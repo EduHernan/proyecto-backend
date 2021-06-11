@@ -10,8 +10,8 @@ class Productos {
         
     }
 
-    guardar(title, precio, url) {
-        let productoAgregado = {title:title, precio: precio, url:url, id: this.array.length+1}
+    guardar(title, price, thumbnail) {
+        let productoAgregado = {title:title, price: price, thumbnail:thumbnail, id: this.array.length+1}
         this.array.push(productoAgregado)
         let contenido2 = this.array
         return contenido2
