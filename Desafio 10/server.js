@@ -105,18 +105,21 @@ router.post('/productos/guardarForm', (req, res) => {
 router.put('/productos/actualizar/:id', (req, res) => {
     
     const info = productos.array
-    let infoID = info[req.params.id-1]
-    infoID = req.body
-    console.log(infoID)
+    let id = req.params.id-1
+    info[id] = req.body
+    
+    console.log(info)
     
     
-    res.json({estado:'actualizado', info:infoID, id:req.params.id})
+    res.json({estado:'actualizado', info:info, id:req.params.id})
 })
 
 router.delete('/productos/borrar/:id', (req, res) => {  
     
     const info = productos.array
-    console.log('eliminado')
+    let id = req.params.id-1
+    info.splice(id, 1)
+    console.log(info)
 
     res.json({estado:'borrado', id:req.params.id})
 })
