@@ -1,0 +1,38 @@
+
+<style>
+    .table td, .table th {
+        text-align: center;
+        vertical-align: middle
+    }
+    h1 {
+        text-align: center;
+        color: blue;
+    }
+    hr {
+        background-color: #ddd;
+    }
+    .jumbotron {
+        min-height: 100vh;
+    }
+</style>
+
+<!-- CSS only -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
+
+<div class="jumbotron">
+    <h1>Vista de Productos</h1>
+    <br>
+
+    {{#if hayProductos}} 
+        <div class="table-responsive">
+            <table class="table table-dark">
+                <tr> <th>Nombre</th> <th>Precio</th> <th>Foto</th></tr>
+                {{#each productos}}
+                    <tr> <td>{{this.title}}</td> <td>${{this.price}}</td> <td><img width="100" src={{this.thumbnail}} alt="not found"></td> </tr>
+                {{/each}}
+            </table>
+        </div>
+    {{else}}  
+        <h3 class="alert alert-warning">No se encontraron productos</h3>
+    {{/if}}
+</div>
