@@ -51,21 +51,40 @@ router.get('/productos/listar/:id', (req, res) => {
 
 })
 
-router.post('/productos/guardar', (req, res) => {
-    productos.guardar('conejo', 111, 'conejo.jpg');
-    const info = productos.array
-    console.log(info)
-    
-    
-    res.json(info)
-})
 
-router.post('/productos/guardarForm', (req, res) => {
-    
+router.post('/productos/guardar', (req, res) => {
+// post valido
     const info = productos.array
     let dataForm = req.body;  
     dataForm.id = productos.array.length+1
     info.push(dataForm)
+    
+    res.json(info)
+
+    
+    
+// post de prueba
+    const infoID = req.body; 
+    infoID.id = productos.array.length+1
+    
+    
+    
+
+
+     // const isID = (id) => {
+        
+        return productos.array.findIndex(idem => idem.id === id)
+    // }
+
+    // const AgregarNuevo = (infoID) => {
+        let estaID = isID(infoID.id)
+        if (estaID === -1)
+        // info.push(infoID)
+        
+    // }
+    
+    
+
     
     res.json(info)
 })
@@ -75,21 +94,23 @@ router.put('/productos/actualizar/:id', (req, res) => {
     const info = productos.array
     let id = req.params.id-1
     info[id] = req.body
-    
+    info[id].id = req.params.id
     console.log(info)
     
     
-    res.json({estado:'actualizado', info:info, id:req.params.id})
+    res.json({estado:'actualizado', productos:info,})
 })
 
 router.delete('/productos/borrar/:id', (req, res) => {  
     
-    const info = productos.array
-    let id = req.params.id-1
-    info.splice(id, 1)
-    console.log(info)
+    let id = req.params.id
+    let filtro = productos.array.filter(prod => prod.id !== parseInt(id))
+    productos.array = filtro
+    
+    console.log(productos.array)
+    
 
-    res.json({estado:'borrado', id:req.params.id})
+    res.json({estado:'borrado', productos:productos.array, id:req.params.id})
 })
 
 app.use('/api', router);
