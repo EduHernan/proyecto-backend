@@ -54,39 +54,35 @@ router.get('/productos/listar/:id', (req, res) => {
 
 router.post('/productos/guardar', (req, res) => {
 // post valido
-    const info = productos.array
+    let info = productos.array
     let dataForm = req.body;  
     dataForm.id = productos.array.length+1
-    info.push(dataForm)
     
-    res.json(info)
+// agregando un Artículo con un id ya existente
+    const Existe = info.some(producto => producto.id === dataForm.id)
+    
+    
+    if (Existe) {
+        const productosID = info.map(prod => {
+            if (prod.id === dataForm.id) {
+                dataForm.id++;
+                
+                return prod
 
+            } else {
+               
+                return prod
+            }
+        })
+        info.push(dataForm)
+    } else {
+        // Agregando un artículo nuevo
+        info.push(dataForm)
+    }
     
     
-// post de prueba
-    const infoID = req.body; 
-    infoID.id = productos.array.length+1
-    
-    
-    
+    res.redirect('/api/productos/listar')
 
-
-     // const isID = (id) => {
-        
-        return productos.array.findIndex(idem => idem.id === id)
-    // }
-
-    // const AgregarNuevo = (infoID) => {
-        let estaID = isID(infoID.id)
-        if (estaID === -1)
-        // info.push(infoID)
-        
-    // }
-    
-    
-
-    
-    res.json(info)
 })
 
 router.put('/productos/actualizar/:id', (req, res) => {

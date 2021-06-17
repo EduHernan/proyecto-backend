@@ -81,48 +81,63 @@ router.get('/productos/listar/:id', (req, res) => {
 
 })
 
+
 router.post('/productos/guardar', (req, res) => {
-    productos.guardar('conejo', 111, 'conejo.jpg');
-    const info = productos.array
-    console.log(info)
+    // post valido
+        let info = productos.array
+        let dataForm = req.body;  
+        dataForm.id = productos.array.length+1
+        
+    // agregando un Artículo con un id ya existente
+        const Existe = info.some(producto => producto.id === dataForm.id)
+        
+        
+        if (Existe) {
+            const productosID = info.map(prod => {
+                if (prod.id === dataForm.id) {
+                    dataForm.id++;
+                    
+                    return prod
     
+                } else {
+                   
+                    return prod
+                }
+            })
+            info.push(dataForm)
+        } else {
+            // Agregando un artículo nuevo
+            info.push(dataForm)
+        }
+        
+        
+        res.redirect('/api/productos/vista')
     
-    res.json(info)
-})
-
-router.post('/productos/guardarForm', (req, res) => {
+    })
     
-    const info = productos.array
-    let dataForm = req.body;  
-    dataForm.id = productos.array.length+1
-    info.push(dataForm)
+    router.put('/productos/actualizar/:id', (req, res) => {
+        
+        const info = productos.array
+        let id = req.params.id-1
+        info[id] = req.body
+        info[id].id = req.params.id
+        console.log(info)
+        
+        
+        res.json({estado:'actualizado', productos:info,})
+    })
     
-    res.json(info)
-})
-
-
-
-router.put('/productos/actualizar/:id', (req, res) => {
+    router.delete('/productos/borrar/:id', (req, res) => {  
+        
+        let id = req.params.id
+        let filtro = productos.array.filter(prod => prod.id !== parseInt(id))
+        productos.array = filtro
+        
+        console.log(productos.array)
+        
     
-    const info = productos.array
-    let id = req.params.id-1
-    info[id] = req.body
-    
-    console.log(info)
-    
-    
-    res.json({estado:'actualizado', info:info, id:req.params.id})
-})
-
-router.delete('/productos/borrar/:id', (req, res) => {  
-    
-    const info = productos.array
-    let id = req.params.id-1
-    info.splice(id, 1)
-    console.log(info)
-
-    res.json({estado:'borrado', id:req.params.id})
-})
+        res.json({estado:'borrado', productos:productos.array, id:req.params.id})
+    })
 
 
 

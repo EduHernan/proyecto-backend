@@ -41,19 +41,7 @@ router.get('/productos/vista', (req, res) => {
 
 }); 
 
-router.get('/productos/vista2', (req, res) => {
-    if (productos.array.length < 1 ) {
-        
-        res.render('main', { productos: productos.array, hayProductos: false });
-    } else {
-        console.log(productos)
-    
-    
-        res.render('main', { productos: productos.array, hayProductos: true });
-    }
-    
-    
-}); 
+
 
 router.get('/productos/listar', (req, res) => {
     
@@ -88,23 +76,15 @@ router.get('/productos/listar/:id', (req, res) => {
 
 })
 
-router.post('/productos/guardar', (req, res) => {
-    productos.guardar('conejo', 111, 'conejo.jpg');
-    const info = productos.array
-    console.log(info)
-    
-    
-    res.json(info)
-})
 
-router.post('/productos/guardarForm', (req, res) => {
+router.post('/productos/guardar', (req, res) => {
     
     const info = productos.array
     let dataForm = req.body;  
     dataForm.id = productos.array.length+1
     info.push(dataForm)
     
-    res.redirect('/productos/vista')
+    res.redirect('/api/productos/vista')
 })
 
 
