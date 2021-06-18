@@ -10,22 +10,9 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "ejs": "^3.1.6",
     "express": "^4.17.1",
     "express-handlebars": "^5.3.2",
-    "moment": "^2.29.1",
-    "pug": "^3.0.2",
-    "rxjs": "^6.6.7",
     "socket.io": "^4.1.2"
   },
-  "devDependencies": {},
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/ullisses1/proyecto-backend.git"
-  },
-  "keywords": [],
-  "bugs": {
-    "url": "https://github.com/ullisses1/proyecto-backend/issues"
-  },
-  "homepage": "https://github.com/ullisses1/proyecto-backend#readme"
+  "devDependencies": {}
 }
