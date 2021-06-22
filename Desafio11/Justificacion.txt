@@ -1,0 +1,5 @@
+De las tres plantillas utilizadas, la que más me agrado fue la de handlebars. 
+Handlebars me pareció tener una mayor cantidad de opciones para armar la plantilla, 
+además de tener una sintaxis agradable para usar que recuerda al template string.
+Ejs lo encontre muy complicado, tiene una sintaxis que puede tardar horas en aplicarse, y pug se vió interesante,
+parece tener una sintaxis simple y rápida, pero su forma de tabular puede hacer confusa su aplicación.

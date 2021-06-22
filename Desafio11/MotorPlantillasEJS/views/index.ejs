@@ -4,7 +4,7 @@
         
         <div class="container mt-3">
             <div class="jumbotron">
-                <h1>Vista de Productos</h1>
+                <h1 class="text-center">Vista de Productos</h1>
                 <br>
             
                 <% if (hayProductos) {%>
@@ -26,13 +26,13 @@
                             
                         </td>
                         <td>
-                            <img width="100" src=<%=producto.thumbnail%> alt="not found">
+                            <img width="100" alt="not found" src=<%=producto.thumbnail%>>
                         </td>
                        
                     </tr>
                     <%});%>
                     <%} else{%>
-                        <h3 class="alert alert-danger">no se encontraron datos</h1>
+                        <h3 class="alert alert-danger">no se encontraron productos</h1>
                 <%}%>
             </table>
         

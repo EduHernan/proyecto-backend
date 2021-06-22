@@ -16,9 +16,11 @@ app.use(express.urlencoded({ extended: true }));
 // Directorio estatico / publico
 app.use(express.static(__dirname + '/public'));
 
-// seteo el motor de plantilla
+
+// indica el directorio donde se almacenaran las plantillas
 app.set('views', './views');
-app.set('view engine', 'ejs');
+// se indica el motor de plantillas a utilizar
+app.set('view engine', 'pug');
 
 
 // importo las rutas y las uso con el prefijo /api
