@@ -1,0 +1,15 @@
+{
+	"timestamp": "29/6/2021 23:52:30",
+	"id": 1,
+	"productos": [
+		{
+			"title": "Adidas",
+			"price": "9499",
+			"stock": "20",
+			"thumbnail": "https://assets.adidas.com/images/h_840,f_auto,q_auto:sensitive,fl_lossy/7b85bada2e2d4329bdd4aa3100c072a6_9366/Zapatillas_Energyfalcon_Negro_EE9843_01_standard.jpg",
+			"descripcion": "Zapatillas adidas",
+			"id": 1,
+			"timestamp": "29/6/2021 23:52:32"
+		}
+	]
+}
