@@ -1,4 +1,4 @@
-class ProductosMemoria {
+class Memorizar {
     constructor() {
         // inicializando variables
         this.productos = []
@@ -79,9 +79,9 @@ class ProductosMemoria {
     
 }
 
-let producto = new ProductosMemoria();
+let producto = new Memorizar();
 
 
 // exporto una instancia de la clase
 
-module.exports = new ProductosMemoria();
+module.exports = Memorizar;
