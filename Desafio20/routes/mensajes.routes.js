@@ -18,7 +18,9 @@ router.post('/mensajes/guardar', async (req, res) => {
 
 router.get('/mensajes', async (req, res) => {
     try {
-        let mensajes = await Mensajes.buscar(req.query);
+        console.log('geteeeeeee')
+        let mensajes = await Mensajes.buscar();
+        console.log('get')
         res.send(mensajes);
     } catch (error) {
         res.status(500).send(error);

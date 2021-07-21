@@ -3,11 +3,11 @@ const express = require('express');
 const router = express.Router();
 
 //importo el modulo de clases
-const productos = require('../api/productos');
+const productos = require('../api/memoria');
 
 // Asigno las rutas a utilizar en el proyecto
 
-router.get('/productos/listar', (req, res) => {
+router.get('/productoss/listar', (req, res) => {
     res.json(productos.listar());
 });
 

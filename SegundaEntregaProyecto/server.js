@@ -11,7 +11,7 @@ const productos = require('./api/productos');
 require('./database/database');
 
 // importo modulo de rutas
-const routesMensajes = require('./routes/mensajes.routes.js');
+const routesMensajes = require('./routes/mongoDB.routes.js');
 const routesProductos = require('./routes/productos.routes.js')
 
 
