@@ -3,51 +3,71 @@ const express = require('express');
 const router = express.Router();
 
 //importo el modulo de clases
-const productos = require('../api/memoria');
+let persistencias = require('../config/config.json').persistencia;
+
+const Persistencia = require(`../api/${persistencias}`);
 
 // Asigno las rutas a utilizar en el proyecto
 
-router.get('/productoss/listar', (req, res) => {
-    res.json(productos.listar());
+router.get('/productos/listar', async (req, res) => {
+    try {
+        
+        let listar = await Persistencia.listar();
+        res.json(listar);
+        
+    } catch (error) {
+        res.status(500).send(error);
+    }
+    
 });
 
-router.get('/productos/listar/:id', (req, res) => {
+router.get('/productos/listar/:id', async (req, res) => {
     let id = req.params.id;
-    res.json(productos.listarPorId(id));
+    let listarID = await Persistencia.listarPorID(id)
+    res.json(listarID);
 });
 
-router.post('/productos/guardar', (req, res) => {
-    let producto = req.body;
+router.post('/productos/guardar', async (req, res) => {
+    try {
+        let producto = req.body;
+        let guardar = await Persistencia.guardar(producto)
     
-    res.json(productos.guardar(producto));
-    
+        res.json(guardar);
+    } catch (error) {
+        res.status(500).send(error);
+    }
+});
+
+router.post('/productos/guardarForm', async (req, res) => {
+    try {
+        let producto = req.body;
+        Persistencia.guardar(producto)
+        res.redirect('/api/productos/vista')
+    } catch (error) {
+        res.status(500).send(error);
+    }
     
 });
 
-router.post('/productos/guardarForm', (req, res) => {
-    let producto = req.body;
-    productos.guardar(producto)
-    res.redirect('/api/productos/vista')
-    
-});
-
-router.put('/productos/actualizar/:id', (req, res) => {
+router.put('/productos/actualizar/:id', async (req, res) => {
     let { id } = req.params
     let datos = req.body
-    res.json({estado:'actualizado', productos:productos.actualizar(id, datos)})
+    let actualizando = await Persistencia.actualizar(id, datos)
+    res.json(actualizando)
     
 });
 
-router.delete('/productos/borrar/:id', (req, res) => {
+router.delete('/productos/borrar/:id', async (req, res) => {
     let { id } = req.params;
-    res.json({estado:'borrado', productos:productos.borrar(id), id:req.params.id})
+    let borrar = await Persistencia.borrar(id)
+    res.json(borrar)
     
 });
 
-
-router.get('/productos/vista', (req, res) => {
+router.get('/productos/vista', async (req, res) => {
     
-    let prods = productos.listar();
+    let prods = await Persistencia.listar();
+    
     
     res.render('main', { productos: prods, hayProductos: prods.length });
     

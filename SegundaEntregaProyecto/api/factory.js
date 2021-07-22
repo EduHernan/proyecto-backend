@@ -1,4 +1,4 @@
-
+// clase que trae la persistencia que sea seleccionada en configuración
 class PersistenciaFactory {
 
     constructor() { }
@@ -6,6 +6,7 @@ class PersistenciaFactory {
     getPersistencia() {
         try {
             let persistencia = require('../config/config.json').persistencia;
+            console.log(`persistencia seleccionada: [${persistencia}]`)
             
             let modulo = require(`../persistencia/${persistencia}`);
             

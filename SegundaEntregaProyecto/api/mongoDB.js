@@ -1,11 +1,13 @@
+
 const Productos = require('../models/mongoProductos');
 
 const factory = require('./factory');
 
 let Persistencia = factory.getPersistencia();
 
+require('../database/databaseMongo');
 
-class MemoriaController extends Persistencia {
+class MongoController extends Persistencia {
 
     constructor() {
         super(Productos);
@@ -13,4 +15,4 @@ class MemoriaController extends Persistencia {
 
 }
 
-module.exports = new MemoriaController();
+module.exports = new MongoController();

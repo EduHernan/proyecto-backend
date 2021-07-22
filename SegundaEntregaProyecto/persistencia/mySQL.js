@@ -1,5 +1,8 @@
+const options = require('../database/databaseMYSQL');
+const knex = require('knex')(options);
 
-class MongoCRUD {
+
+class MySQLCRUD {
     constructor(prod) {
         this.productos = prod;
     }
@@ -10,7 +13,7 @@ class MongoCRUD {
 
     async guardar(producto) {
         try {
-            let resultado = await this.productos.create(producto)
+            let resultado = await knex('productos').insert(producto);
             return resultado
         } catch (error) {
             throw error;
@@ -19,7 +22,8 @@ class MongoCRUD {
 
     async listar() {
         try {
-            let mensajes = await this.productos.find()
+            let mensajes = await knex.from('productos').select('*')
+            console.log(mensajes)
             return mensajes;
         } catch (error) {
             throw error;
@@ -28,7 +32,7 @@ class MongoCRUD {
 
     async listarPorID (condicion) {
         try {
-            let mensaje = await this.productos.find({_id:condicion})
+            let mensaje = await knex.from('productos').select('*').where('id', '=', condicion)
             return mensaje;
         } catch (error) {
             throw error;
@@ -38,7 +42,7 @@ class MongoCRUD {
 
     async actualizar(id, datos) {
         try {
-            let actualizado = await this.productos.update({_id:id}, {$set: datos}, {multi:true})
+            let actualizado = await knex.from('productos').where('id', '=', id).update(datos)
             return actualizado;
         } catch (error) {
             throw error;
@@ -47,7 +51,7 @@ class MongoCRUD {
 
     async borrar(id) {
         try {
-            let borrado = await this.productos.findByIdAndDelete(id)
+            let borrado = await knex.from('productos').where('id', '=', id).del()
             return borrado;
         } catch (error) {
             throw error;
@@ -55,4 +59,4 @@ class MongoCRUD {
     }
 }
 
-module.exports = MongoCRUD;
+module.exports = MySQLCRUD;

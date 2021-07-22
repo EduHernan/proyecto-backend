@@ -4,15 +4,14 @@ const app = express();
 
 // importo socket.io y le pasamos la constante http
 const http = require('http').Server(app);
-const io = require('socket.io')(http);
 
 //importo el modulo de clases
-const productos = require('./api/productos');
-require('./database/database');
+//  const productos = require('./api/mongoDB');
+
 
 // importo modulo de rutas
-const routesMensajes = require('./routes/mongoDB.routes.js');
-const routesProductos = require('./routes/productos.routes.js')
+const routesProductos = require('./routes/productos.routes.js');
+const routesCarrito = require('./routes/carrito.routes.js')
 
 
 // creando la app de tipo express
@@ -36,31 +35,9 @@ app.engine('hbs', handlebars({
 app.set('view engine', 'hbs');
 app.set('views', './views');
 
-const messages = [];
-
-// haciendo conexion websocket
-io.on('connection', socket => {
-    console.log('Nuevo usuario conectado');
-    /* Envio los mensajes al cliente que se conectó */
-    socket.emit('productos', productos.listar());
-
-    socket.emit('messages', messages);
-
-    /* Escucho los mensajes enviado por el cliente y se los propago a todos */
-    socket.on('update', data => {
-        io.sockets.emit('productos', productos.listar());
-    });
-
-    // si el cliente envia un nuevo mensaje, lo guardo y emito
-    socket.on('new-message', data => {
-        messages.push(data);
-        io.sockets.emit('messages', messages);
-    });
-});
-
 // importo las rutas y las uso con el prefijo /api
-app.use('/api', routesMensajes);
 app.use('/api', routesProductos);
+app.use('/api', routesCarrito);
 
 // obtengo el puerto del enviroment o lo seteo por defecto
 const PORT = process.env.PORT || 8080;

@@ -1,4 +1,4 @@
-// module of connection to the database.
+// modulo de conección a base de datos de Mongo
 const mongoose = require('mongoose');
 const config = require('../config/config.json');
 
