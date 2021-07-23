@@ -1,5 +1,6 @@
 const faker = require('faker');
 
+
 class Productos {
     constructor() {
         // inicializando variables
@@ -8,19 +9,20 @@ class Productos {
 
     // funciones a utilizar
 
-    generar(query) {
-        let cant = query.cant || 10
+    generar(cant) {
+        let cantidad = cant || 10
         let id = 1
         let array = [];
 
-        for (let i=0; i < cant; i++) {
+        for (let i=0; i < cantidad; i++) {
              array.push({
                  id: id ++,
-                 nombre: faker.name.firstName(),
-                 apellido:faker.name.lastName(),
-                 color:faker.commerce.color()
+                 title: faker.commerce.productName(),
+                 price:faker.commerce.price(),
+                 thumbnail:faker.internet.avatar()
              })
         }
+        return array
     }
 
     listar () {

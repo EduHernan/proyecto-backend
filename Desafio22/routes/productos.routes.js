@@ -7,10 +7,10 @@ const productos = require('../api/productos');
 
 // Asigno las rutas a utilizar en el proyecto
 
-router.get('/productos/vista-test/:query', (req, res) => {
-    let {query} = req.params;
-    let mocks = productos.generar(query);
-    res.json(mocks);
+router.get('/productos/vista-test', (req, res) => {
+    let cantidad = req.query.cant
+    let mocks = productos.generar(cantidad);
+    res.render('main', { productos: mocks, hayProductos: mocks.length });
     
     
     
