@@ -1,4 +1,4 @@
-const productos = require('../api/productos');
+const productos = require('../persistencia/memoria');
 
 class Carrito {
     constructor() {
