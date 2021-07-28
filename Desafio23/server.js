@@ -6,10 +6,6 @@ const app = express();
 const http = require('http').Server(app);
 const io = require('socket.io')(http);
 
-//importo el modulo de clases
-const productos = require('./api/productos');
-require('./database/database');
-
 // importo modulo de rutas
 const routesMensajes = require('./routes/mensajes.routes.js');
 const routesProductos = require('./routes/productos.routes.js')
@@ -36,11 +32,8 @@ app.engine('hbs', handlebars({
 app.set('view engine', 'hbs');
 app.set('views', './views');
 
-const messages = {
-    id:1000,
-    mensajes: []
-};
-
+//importo el modulo de clases
+const productos = require('./api/productos');
 
 // haciendo conexion websocket
 io.on('connection', socket => {

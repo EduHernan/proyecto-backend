@@ -1,5 +1,6 @@
-const faker = require('faker');
+const { normalize, schema } = require('normalizr');
 
+const fs = require('fs')
 
 class Productos {
     constructor() {
@@ -12,8 +13,43 @@ class Productos {
     }
 
     // funciones a utilizar
+
     normalizar() {
+
+
         return this.messages
+    }
+
+    propagar (data) {
+        let datos = this.messages.mensajes
+        datos.push(data);
+        console.log(datos)
+        
+        return datos
+    }
+
+    probarNormalizado() {
+        const schemaAuthor = new schema.Entity('author', {}, {idAttribute:'email'} );
+
+        // definiendo esquema de mensajes
+        const schemaMensaje = new schema.Entity('mensajes', {
+            author: schemaAuthor
+        }, {idAttribute: '_id'})
+
+        // definiendo un esquema de posts
+
+        const schemaMensajes = new schema.Entity('posts', {
+            mensajes:[schemaMensaje]
+        }, {idAttribute: 'id'})
+
+        let mensajesConId = {
+            id: 'mensajes',
+            mensajes : mensajes.map(mensaje => ({...mensaje._doc}))
+        }
+
+        let mensajesNormalizados = normalize(mensajesConId, schemaMensajes)
+
+        return mensajesNormalizados
     }
 
     generar(cant) {
