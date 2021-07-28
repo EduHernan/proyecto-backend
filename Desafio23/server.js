@@ -55,6 +55,8 @@ io.on('connection', socket => {
         // aca normalizo
         let datos = productos.normalizar()
         datos.mensajes.push(data);
+        
+        productos.probarNormalizado()
         io.sockets.emit('messages', datos.mensajes);
     });
 });

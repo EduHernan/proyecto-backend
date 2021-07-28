@@ -32,22 +32,22 @@ class Productos {
         const schemaAuthor = new schema.Entity('author', {}, {idAttribute:'email'} );
 
         // definiendo esquema de mensajes
-        const schemaMensaje = new schema.Entity('mensajes', {
+        const schemaMensaje = new schema.Entity('post', {
             author: schemaAuthor
         }, {idAttribute: '_id'})
 
         // definiendo un esquema de posts
 
         const schemaMensajes = new schema.Entity('posts', {
+            author: schemaAuthor,
             mensajes:[schemaMensaje]
         }, {idAttribute: 'id'})
 
-        let mensajesConId = {
-            id: 'mensajes',
-            mensajes : mensajes.map(mensaje => ({...mensaje._doc}))
-        }
+        let mensajesNormalizar = this.messages.mensajes
 
-        let mensajesNormalizados = normalize(mensajesConId, schemaMensajes)
+        let mensajesNormalizados = normalize(mensajesNormalizar, schemaMensajes)
+        
+        fs.writeFileSync('./normalizado.json', JSON.stringify(mensajesNormalizados, null, 3));
 
         return mensajesNormalizados
     }
