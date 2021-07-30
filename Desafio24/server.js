@@ -15,34 +15,16 @@ const productos = require('./api/productos');
 
 // inicio programa de login de sesión
 
+app.use(cookieParser())
 app.use(session({
     secret: 'secreto',
     resave: false,
-    saveUninitialized: false
+    saveUninitialized: false,
+    rolling: true,
+    cookie: {
+        maxAge: 60000
+    }
 }))
-
-const getNombreSession = req => req.session.nombre? req.session.nombre: ''
-
-app.get('/login', (req,res) => {
-    if(req.session.contador) {
-        req.session.contador++
-        res.send(`${getNombreSession(req)} visitaste la página ${req.session.contador} veces.`)
-    }
-    else {
-        let { nombre } = req.query
-        req.session.nombre = nombre
-        req.session.contador = 1
-        res.send(`Te damos la bienvenida ${getNombreSession(req)}`)
-    }
-})
-
-app.get('/olvidar', (req,res) => {
-    let nombre = getNombreSession(req)
-    req.session.destroy( err => {
-        if(!err) res.send(`Hasta luego ${nombre}`)
-        else res.send({error: 'olvidar', body: err})
-    })
-})
 
 // importo modulo de rutas
 const routesMensajes = require('./routes/mensajes.routes.js');
@@ -70,10 +52,43 @@ app.engine('hbs', handlebars({
 app.set('view engine', 'hbs');
 app.set('views', './views');
 
-const messages = {
-    id:1000,
-    mensajes: []
-};
+// rutas para login de sesion
+
+const getNombreSession = req => req.session.nombre? req.session.nombre: ''
+
+app.get('/login', (req,res) => {
+    if(req.session.nombre) {
+        res.render("home", {
+            nombre: req.session.nombre
+        })
+    }
+    else {
+        
+        res.send({error: 'No ha iniciado sesión'})
+    }
+})
+
+app.post('/login', (req,res) => {
+    let { nombre } = req.body
+    req.session.nombre = nombre
+    console.log(nombre)
+    res.redirect('/login')
+})
+
+
+app.get('/logout', (req,res) => {
+    let nombre = getNombreSession(req)
+    if(nombre) {
+        req.session.destroy( err => {
+            if(!err) res.render("logout", { nombre })
+            else res.redirect('/')
+        })
+    }
+    else {
+        res.redirect('/')
+    }
+})
+
 
 
 // haciendo conexion websocket
