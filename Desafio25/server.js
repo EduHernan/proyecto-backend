@@ -2,9 +2,37 @@
 const express = require('express');
 const app = express();
 
+// importo modulos de cookies
+const cookieParser = require('cookie-parser')
+const session = require('express-session')
+const mongoStore = require('connect-mongo')
+
+
 // importo socket.io y le pasamos la constante http
 const http = require('http').Server(app);
 const io = require('socket.io')(http);
+
+//importo el modulo de clases
+const productos = require('./api/productos');
+
+// inicio programa de login de sesión
+
+app.use(cookieParser())
+app.use(session({
+    store: mongoStore.create({ 
+        // Conectando la persistencia de sesion a mongo atlas
+        mongoUrl: "mongodb+srv://eduardo:ccziMeh@cluster0.fk8jx.mongodb.net/sesiones?retryWrites=true&w=majority",
+        mongoOptions: { useNewUrlParser: true, useUnifiedTopology: true },
+        ttl: 600
+    }),
+    secret: 'secreto',
+    resave: false,
+    saveUninitialized: false,
+    rolling: true,
+    cookie: {
+        maxAge: 60000
+    }
+}))
 
 // importo modulo de rutas
 const routesMensajes = require('./routes/mensajes.routes.js');
@@ -32,8 +60,44 @@ app.engine('hbs', handlebars({
 app.set('view engine', 'hbs');
 app.set('views', './views');
 
-//importo el modulo de clases
-const productos = require('./api/productos');
+// rutas para login de sesion
+
+const getNombreSession = req => req.session.nombre? req.session.nombre: ''
+
+app.get('/login', (req,res) => {
+    if(req.session.nombre) {
+        res.render("home", {
+            nombre: req.session.nombre
+        })
+    }
+    else {
+        
+        res.render("login")
+    }
+})
+
+app.post('/login', (req,res) => {
+    let { nombre } = req.body
+    req.session.nombre = nombre
+    console.log(nombre)
+    res.redirect('/login')
+})
+
+
+app.get('/logout', (req,res) => {
+    let nombre = getNombreSession(req)
+    if(nombre) {
+        req.session.destroy( err => {
+            if(!err) res.render("logout", { nombre })
+            else res.redirect('/')
+        })
+    }
+    else {
+        res.redirect('/')
+    }
+})
+
+
 
 // haciendo conexion websocket
 io.on('connection', socket => {
@@ -42,7 +106,7 @@ io.on('connection', socket => {
     /* Envio los mensajes al cliente que se conectó */
     socket.emit('productos', productos.listar());
 
-    socket.emit('messages', productos.normalizar());
+    socket.emit('messages', productos.normalizar().mensajes);
 
     /* Escucho los mensajes enviado por el cliente y se los propago a todos */
     socket.on('update', data => {
@@ -54,10 +118,8 @@ io.on('connection', socket => {
 
         // aca normalizo
         let datos = productos.normalizar()
-        datos.push(data);
-        
-        productos.probarNormalizado()
-        io.sockets.emit('messages', datos);
+        datos.mensajes.push(data);
+        io.sockets.emit('messages', datos.mensajes);
     });
 });
 

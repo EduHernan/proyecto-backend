@@ -1,57 +1,17 @@
-const { normalize, schema } = require('normalizr');
-
-const fs = require('fs');
-const mensajes = require('./mensajes');
 
 class Productos {
     constructor() {
         // inicializando variables
         this.productos = []
-        this.messages = []
+        this.messages = {
+            id:1000,
+            mensajes: []
+        };
     }
 
     // funciones a utilizar
-
     normalizar() {
-
-
         return this.messages
-    }
-
-    propagar (data) {
-        let datos = this.messages
-        datos.push(data);
-        console.log(datos)
-        
-        return datos
-    }
-
-    probarNormalizado() {
-        const schemaAuthor = new schema.Entity('author', {}, {idAttribute:'id'} );
-
-        // definiendo esquema de mensajes
-        const schemaMensaje = new schema.Entity('post', {
-            author: schemaAuthor
-        }, {idAttribute: 'id'})
-
-        // definiendo un esquema de posts
-
-        const schemaMensajes = new schema.Entity('posts', {
-            mensajes:[schemaMensaje]
-        }, {idAttribute: 'id'})
-        
-        let mensajesNormalizar = {
-            id:'mensajes',
-            mensajes: this.messages.map(mensaje => ({...mensaje}))
-        }
-        console.log(mensajesNormalizar)
-
-        let mensajesNormalizados = normalize(mensajesNormalizar, schemaMensajes)
-        console.log('mensaje con id' + JSON.stringify(mensajesNormalizados, null, 3))
-        
-        fs.writeFileSync('./normalizado.json', JSON.stringify(mensajesNormalizados, null, 3));
-
-        return mensajesNormalizados
     }
 
     generar(cant) {

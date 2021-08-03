@@ -1,38 +1,30 @@
 {
    "entities": {
-      "posts": {
+      "author": {
+         "hernandez-100000@hotmail.com": {
+            "id": "hernandez-100000@hotmail.com",
+            "nombre": "Eduardo",
+            "apellido": "Hernandez",
+            "alias": "edu",
+            "fecha": "2/8/2021 23:41:04"
+         }
+      },
+      "post": {
          "undefined": {
-            "0": {
-               "author": {
-                  "id": "hernandez-100000@hotmail.com",
-                  "nombre": "Eduardo",
-                  "apellido": "Hernandez",
-                  "alias": "edu",
-                  "fecha": "28/7/2021 7:55:12"
-               },
-               "mensaje": "ee"
-            },
-            "1": {
-               "author": {
-                  "id": "hernandez-100000@hotmail.com",
-                  "nombre": "Eduardo",
-                  "apellido": "Hernandez",
-                  "alias": "edu",
-                  "fecha": "28/7/2021 7:55:14"
-               },
-               "mensaje": "aaa"
-            },
-            "2": {
-               "author": {
-                  "id": "hernandez-100000@hotmail.com",
-                  "nombre": "Eduardo",
-                  "apellido": "Hernandez",
-                  "alias": "edu",
-                  "fecha": "28/7/2021 7:55:25"
-               },
-               "mensaje": "ee"
-            }
+            "author": "hernandez-100000@hotmail.com",
+            "mensaje": "gfdg"
+         }
+      },
+      "posts": {
+         "mensajes": {
+            "id": "mensajes",
+            "mensajes": [
+               null,
+               null,
+               null
+            ]
          }
       }
-   }
+   },
+   "result": "mensajes"
 }
