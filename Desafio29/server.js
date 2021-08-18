@@ -93,6 +93,8 @@ app.set('views', './views');
 
 // ruta para info de sistema 
 
+const numCPUs = require('os').cpus().length;
+
 app.get('/info', (req,res) => {
     res.render('info', {
         args:  JSON.stringify(process.argv,null,'\t'),
@@ -101,7 +103,9 @@ app.get('/info', (req,res) => {
         pid: process.pid,
         version: process.version,        
         dir: process.cwd(),        
-        memoria: JSON.stringify(process.memoryUsage(),null,'\t')
+        memoria: JSON.stringify(process.memoryUsage(),null,'\t'),
+        numCPUs: numCPUs
+
     })
 })
 
