@@ -141,3 +141,5 @@
 2021/08/19 23:45:01 [notice] 7696#7232: signal process started
 2021/08/19 23:45:34 [notice] 7144#1540: signal process started
 2021/08/19 23:46:01 [notice] 5920#6488: signal process started
+2021/08/19 23:50:14 [error] 5012#2436: *345 CreateFile() "C:\Users\Edu\Desktop\curso\Backend\repo-backend\repositorio-backend\Desafio30\nginx-1.18.0-proxy-reverso/../nginx_node/public/login" failed (2: El sistema no puede encontrar el archivo especificado), client: 127.0.0.1, server: nginx_node, request: "GET /login HTTP/1.1", host: "localhost", referrer: "http://localhost/"
+2021/08/19 23:50:25 [error] 5012#2436: *345 CreateFile() "C:\Users\Edu\Desktop\curso\Backend\repo-backend\repositorio-backend\Desafio30\nginx-1.18.0-proxy-reverso/../nginx_node/public/login" failed (2: El sistema no puede encontrar el archivo especificado), client: 127.0.0.1, server: nginx_node, request: "GET /login HTTP/1.1", host: "localhost", referrer: "http://localhost/"

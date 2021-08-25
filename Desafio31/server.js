@@ -1,6 +1,8 @@
 // importo express
 const express = require('express');
+const compression = require('compression');
 const app = express();
+app.use(compression());
 
 // importo modulos de cookies
 const cookieParser = require('cookie-parser')
@@ -17,13 +19,14 @@ const io = require('socket.io')(http);
 
 //importo el modulo de clases
 const productos = require('./api/productos');
+const logger = require('./models/winston');
 
 // iniciando programa para registro y logueo de usuarios 
 
 // asignando credenciales de facebook
 dotenv.config();
-const FACEBOOK_CLIENT_ID = process.env.FACEBOOK_CLIENT_ID;
-const FACEBOOK_CLIENT_SECRET = process.env.FACEBOOK_CLIENT_SECRET;
+const FACEBOOK_CLIENT_ID = process.argv[3] || process.env.FACEBOOK_CLIENT_ID;
+const FACEBOOK_CLIENT_SECRET = process.argv[4] || process.env.FACEBOOK_CLIENT_SECRET;
 
 
 // configuramos passport para usar facebook
@@ -34,7 +37,7 @@ passport.use(new FacebookStrategy({
   profileFields: ['id', 'displayName', 'photos', 'emails'],
   scope: ['email']
 }, function (accessToken, refreshToken, profile, done) {
-  console.log(profile);
+    logger.info('127.0.0.1 - informacion del user', profile)
   let userProfile = profile;
   return done(null, userProfile);
 }));
@@ -45,8 +48,8 @@ passport.use(new FacebookStrategy({
     done(null, user);
   });
   
-  passport.deserializeUser(function (obj, done) {
-      done(null, obj);
+  passport.deserializeUser(function (user, done) {
+      done(null, user);
   });
 
 // inicio programa de login de sesión
@@ -91,11 +94,30 @@ app.engine('hbs', handlebars({
 app.set('view engine', 'hbs');
 app.set('views', './views');
 
+// ruta para info de sistema 
+
+const numCPUs = require('os').cpus().length;
+
+app.get('/info', (req,res) => {
+    res.render('info', {
+        args:  JSON.stringify(process.argv,null,'\t'),
+        path: process.execPath,
+        plataforma: process.platform,
+        pid: process.pid,
+        version: process.version,        
+        dir: process.cwd(),        
+        memoria: JSON.stringify(process.memoryUsage(),null,'\t'),
+        puerto: PORT,
+        numCPUs: numCPUs
+
+    })
+})
+
 // rutas para login de sesion
 
 app.get('/login', (req,res) => {
     if(req.isAuthenticated()) {
-        
+        // logger.info(req.user)
         res.render("home", {
           nombre: req.user.displayName,
           foto: req.user.photos[0].value,
@@ -106,6 +128,7 @@ app.get('/login', (req,res) => {
         res.render("login")
     }
 })
+
 
 app.get('/auth/facebook', passport.authenticate('facebook'));
 app.get('/auth/facebook/callback', passport.authenticate('facebook',
@@ -122,6 +145,7 @@ app.get('/faillogin', (req,res) => {
 app.get('/logout', (req,res) => {
     let nombre = req.user.displayName
     if(nombre) {
+        logger.warn(`127.0.0.1 - Saliendo de la aplicacion`)
         req.logout()
         res.render("logout", { nombre })
     }
@@ -134,7 +158,7 @@ app.get('/logout', (req,res) => {
 
 // haciendo conexion websocket
 io.on('connection', socket => {
-    console.log('Nuevo usuario conectado');
+    logger.info(`127.0.0.1 - Nuevo usuario conectado`)
     
     /* Envio los mensajes al cliente que se conectó */
     socket.emit('productos', productos.listar());
@@ -161,16 +185,17 @@ app.use('/api', routesMensajes);
 app.use('/api', routesProductos);
 
 // obtengo el puerto del enviroment o lo seteo por defecto
-const PORT = process.env.PORT || 8080;
-
+const PORT = parseInt(process.argv[2]) || process.env.PORT;
 
 // pongo a escuchar el servidor en el puerto indicado
 const server = http.listen(PORT, () => {
-    console.log(`servidor escuchando en http://localhost:${PORT}`);
+
+    logger.info(`127.0.0.1 - servidor escuchando en http://localhost:${PORT}`)
+    logger.info(`127.0.0.1 - id de salida: ${process.pid}`)
     
 });
 
 // en caso de error, avisar
 server.on('error', error => {
-    console.log('error en el servidor:', error);
+    logger.error("127.0.0.1 - error en el servidor:", error)
 });

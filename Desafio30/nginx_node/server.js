@@ -45,8 +45,8 @@ passport.use(new FacebookStrategy({
     done(null, user);
   });
   
-  passport.deserializeUser(function (obj, done) {
-      done(null, obj);
+  passport.deserializeUser(function (user, done) {
+      done(null, user);
   });
 
 // inicio programa de login de sesión
