@@ -25,8 +25,11 @@ const logger = require('./models/winston');
 
 // asignando credenciales de facebook
 dotenv.config();
-const FACEBOOK_CLIENT_ID = process.argv[3] || process.env.FACEBOOK_CLIENT_ID;
-const FACEBOOK_CLIENT_SECRET = process.argv[4] || process.env.FACEBOOK_CLIENT_SECRET;
+const FACEBOOK_CLIENT_KEY = '1481240962252570'
+const FACEBOOK_CLIENT_SECRETKEY = 'e155a3200362c5f7afb7a890d4afa1c2'
+
+const FACEBOOK_CLIENT_ID = FACEBOOK_CLIENT_KEY || process.env.FACEBOOK_CLIENT_ID;
+const FACEBOOK_CLIENT_SECRET = FACEBOOK_CLIENT_SECRETKEY || process.env.FACEBOOK_CLIENT_SECRET;
 
 
 // configuramos passport para usar facebook

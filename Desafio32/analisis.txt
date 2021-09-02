@@ -1,0 +1,11 @@
+Analisis de performance.
+
+levantando el servidor con --prof server.js y aplicando artillery para simular 50 clientes se generaron los
+archivos result_info que es una vista a la ruta info, y result_infoConsole que es una vista a la ruta info
+pero agregando un console log de toda la informacion. Los datos de result_info muestran que la vista a esta ruta
+es más rapida a la otra al no usar console logs que retrasan el tiempo de respuesta de las rutas.
+
+Luego usando --inspect server.js para hacer una inspeccion de nuestra pagina en chrome, esto dejó una 
+imagen llamada TiempoCargaConInspect.png que al igual que en el anterior analisis muestra que ir a la ruta
+info con console logs retrasa el tiempo de respuesta de la ruta, haciendo ineficaz usar tantos console logs
+al momento de navegar el servidor.
