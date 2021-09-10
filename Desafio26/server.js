@@ -162,6 +162,7 @@ app.set('views', './views');
 
 app.get('/login', (req,res) => {
     if(req.isAuthenticated()) {
+      console.log(req.user)
         res.render("home", {
             nombre: req.user.username
         })
@@ -244,6 +245,7 @@ require('./database/database');
 // pongo a escuchar el servidor en el puerto indicado
 const server = http.listen(PORT, () => {
     console.log(`servidor escuchando en http://localhost:${PORT}`);
+    
     
 });
 

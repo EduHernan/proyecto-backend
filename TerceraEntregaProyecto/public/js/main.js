@@ -6,6 +6,29 @@ socket.on('productos', function (productos) {
     document.getElementById('datos').innerHTML = tablaHanblebars(productos)
 });
 
+/* obtengo el formulario */
+const form = document.querySelector('form');
+
+form.addEventListener('submit', event => {
+    event.preventDefault();
+    const data = { title: form[0].value, price: form[1].value, thumbnail: form[2].value };
+
+    fetch('/api/productos/guardar', {
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        method: 'POST',
+        body: JSON.stringify(data)
+    })
+    .then(respuesta => respuesta.json())
+    .then(productos => {
+        form.reset();
+        socket.emit('update', 'ok');
+    })
+    .catch(error => {
+        console.log('ERROR', error);
+    });
+});
 
 // agregando plantilla handlebars
 function tablaHanblebars(productos) {
