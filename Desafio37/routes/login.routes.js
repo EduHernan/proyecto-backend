@@ -1,6 +1,7 @@
 // importo el modulo de express
 const express = require('express');
 const router = express.Router();
+const logger = require('../utils/winston');
 
 // importo modulos para envio de emails
 const EnviarEthereal = require('../utils/nodemailer-ethereal.js');
@@ -13,9 +14,12 @@ module.exports = function(passport) {
 
     router.get('/login', (req,res) => {
         if(req.isAuthenticated()) {
+          logger.info(`127.0.0.1 - ${req.user}`)
           console.log(req.user)
             res.render("home", {
-                nombre: req.user.username
+                nombre: req.user.username,
+                foto: req.user.imagen,
+                email: req.user.email
             })
         }
         else {
@@ -42,6 +46,20 @@ module.exports = function(passport) {
         // let email = 'hernandez-9193@hotmail.com'
         let asunto = 'Nuevo registro'
         let mensaje = 'Ingresó ' + nombre + ' en la fecha ' + new Date().toLocaleString() 
+
+        //Registro de ingreso por Ethereal
+        
+        EnviarEthereal(asunto, mensaje, (err, info) => {
+            if(err) console.log(err)
+            // else console.log(info)
+        })
+
+        //Registro de ingreso por Gmail
+            
+        EnviarGmail(asunto, mensaje, (err, info) => {
+            if(err) console.log(err)
+            // else console.log(info)       
+        })
 
         res.redirect('/') 
     })
