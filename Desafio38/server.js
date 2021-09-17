@@ -16,8 +16,8 @@ const io = require('socket.io')(http);
 
 // importo modulo de loggers
 const logger = require('./utils/winston');
-var { graphqlHTTP } = require('express-graphql');
-var { buildSchema } = require('graphql');
+let { graphqlHTTP } = require('express-graphql');
+let { buildSchema } = require('graphql');
 
 // inicio programa de login de sesión
 
@@ -51,65 +51,68 @@ initPassport(passport);
 
 let schema = buildSchema(`
     type Query {
-        message: String,
-        messages: [String],
-        number: Int,
-        numbers: [Int],
-        course(id: Int!): Course
-        courseByTopic(topic: String): [Course]
-        courses: [Course],
-        saludo(nombre: String!): String,
-        articulos: [Articulo]
+        producto(id: Int!): Producto
+        productos: [Producto],
     },
     type Mutation {
-        updateCourseTopic(id: Int!, topic: String!): Course,
-        guardarArticulo(titulo: String!, texto: String!, autor: String!): Articulo
+        guardarProducto(id: String!, title: String!, price: String!, descripcion: String!): Producto
     },
     
-    type Articulo {
-        titulo: String,
-        texto: String,
-        autor: String
+    type Producto {
+        id: String
+        title: String,
+        price: String,
+        descripcion: String
     }    
 `);
 
-var coursesData = [
+let productos = [
     {
         id: 1,
-        title: 'JavaScript: Understanding The Weird Parts',
-        price: 'Anthony Alicea',
-        description: 'An advanced JavaScript course for everyone! Scope, closures, prototypes, this, build your own framework, and more.',
+        title: 'JavaScript',
+        price: '4000',
+        descripcion: 'lorem ipsum',
     },
     {
         id: 2,
-        title: 'JavaScript: Understanding The Weird Parts',
-        price: 'Anthony Alicea',
-        description: 'An advanced JavaScript course for everyone! Scope, closures, prototypes, this, build your own framework, and more.',
+        title: 'Understanding The Weird Parts',
+        price: '999',
+        descripcion: 'An advanced JavaScript course for everyone! Scope, closures, prototypes, this, build your own framework, and more.',
     },
     {
         id: 3,
-        title: 'JavaScript: Understanding The Weird Parts',
-        price: 'Anthony Alicea',
-        description: 'An advanced JavaScript course for everyone! Scope, closures, prototypes, this, build your own framework, and more.',
+        title: 'Zapatillas Adidas',
+        price: '3222',
+        descripcion: 'Zapatillas urbanas para el dia a día',
         
     }
 ]
 
-let productos = []
+let getAllProductos = function () {
+    return productos
+}
 
-var guardarArticulo = function ({ title, price, descripcion }) {
-    let producto = { title, price, descripcion };
+let getProductoById = function (args) {
+    let id = args.id;
+    return productos.filter(prod => {
+        return prod.id == id;
+    })[0];
+}
+
+let guardarProducto = function ({id, title, price, descripcion }) {
+    let producto = {id, title, price, descripcion };
     productos.push(producto);
     return producto;
 }
 
 // Root resolver
-var root = {
-    productos: () => productos,
-    guardarProducto: guardarProducto
+let root = {
+    guardarProducto: guardarProducto,
+    productos: getAllProductos,
+    producto: getProductoById
 };
 
-let productos = []
+
 
 app.use('/graphql', graphqlHTTP({
     schema: schema,
@@ -133,6 +136,7 @@ app.use(express.static(__dirname + '/public'));
 
 // seteo el motor de plantilla
 const handlebars = require('express-handlebars');
+const { propfind } = require('./routes/productos.routes.js');
 
 // configuracion de handlebars en express
 app.engine('hbs', handlebars({
