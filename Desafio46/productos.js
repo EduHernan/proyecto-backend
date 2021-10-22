@@ -18,7 +18,10 @@ let productos = [
 router.get('/', (ctx, next) => {
     if (productos.length < 1 ) {
         
-        return {error: 'no hay productos cargados'};
+        ctx.body = {
+            status: 'error!',
+            message: `no hay productos cargados`
+        };
     } else {
         console.log(productos)
         ctx.body = {
