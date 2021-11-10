@@ -1,4 +1,6 @@
-const productos = require('../persistencia/memoria');
+// Archivo antiguo que simulaba el carrito en memoria
+
+const productos = require('../api/memoria');
 
 class Carrito {
     constructor() {
@@ -14,6 +16,8 @@ class Carrito {
     listar () {
         
         if (this.carrito.productos.length < 1 ) {
+            let prods = productos.listar()
+            console.log(prods)
         
             return {error: 'no hay carrito cargados'};
         } else {
@@ -22,7 +26,7 @@ class Carrito {
         
     }
 
-    listarPorId(id) {
+    listarPorID(id) {
         const infoCarrito = this.carrito.productos
         let productoID = infoCarrito.find (p => p.id === parseInt(id))
         console.log(productoID)

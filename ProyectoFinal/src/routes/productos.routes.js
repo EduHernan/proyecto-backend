@@ -3,7 +3,7 @@ const express = require('express');
 const router = express.Router();
 
 //importo el modulo de clases
-let persistencias = require('../config/config.json').persistencia;
+let persistencias = require('../config/config').PERSISTENCIA;
 
 const Persistencia = require(`../api/${persistencias}`);
 

@@ -9,6 +9,7 @@ const mongoStore = require('connect-mongo')
  
 // importo modulos de passport 
 const passport = require('passport');
+const LocalStrategy = require('passport-local').Strategy;
  
 // importo socket.io y le pasamos la constante http
 const http = require('http').Server(app);
@@ -42,6 +43,7 @@ app.use(session({
 // Inicializando passport y restaurando la autenticacion si existe 
 app.use(passport.initialize());
 app.use(passport.session());
+
 
 // Initialize Passport
 const initPassport = require('./config/initPassport');
@@ -78,13 +80,28 @@ const layout = __dirname + '/views'
 app.set('view engine', 'hbs');
 app.set('views', layout);
 
+//funcion para proteger las rutas del servidor
+function checkAuthentication(req, res, next) {
+    if (req.isAuthenticated()) {
+      //req.isAuthenticated() will return true if user is logged in
+      next();
+    } else {
+      res.render("login");
+    }
+  }
 
+
+  // protejo el servidor ante cualquier excepcion no atrapada
+app.use((err, req, res, next) => {
+    console.error(err.message);
+    return res.status(500).send('Algo se rompio!');
+});
+
+  
 // importo las rutas y las uso con el prefijo /api
+app.use('/api', routesLogin(passport));
 app.use('/api', routesProductos);
 app.use('/api', routesCarrito);
-app.use('/api', routesLogin(passport));
-
-// pongo a escuchar el servidor en el puerto indicado
 
 // seteo el host y el puerto del archivo de configuracion.
 app.set('host', config.HOST);

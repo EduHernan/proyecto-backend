@@ -2,5 +2,5 @@
     "PORT": 8080,
     "MONGO_URL": "mongodb://localhost:27017/ecommerce",
     "MONGO_DBAAS": "mongodb+srv://eduardo:ccziMeh@cluster0.fk8jx.mongodb.net/ecommerce?retryWrites=true&w=majority",
-    "persistencia": "mongoAtlas"
+    "persistencia": "memoria"
 }

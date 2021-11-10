@@ -19,7 +19,7 @@ class MongoCRUD {
 
     async listar() {
         try {
-            let mensajes = await this.productos.find()
+            let mensajes = await this.productos.find().lean()
             return mensajes;
         } catch (error) {
             throw error;
@@ -53,6 +53,7 @@ class MongoCRUD {
             throw error;
         }
     }
+    
 }
 
 module.exports = MongoCRUD;

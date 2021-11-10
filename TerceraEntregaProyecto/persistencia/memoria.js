@@ -16,7 +16,7 @@ class Memorizar {
         
     }
 
-    listarPorId(id) {
+    listarPorID(id) {
         const info = this.productos
         const infoID = info[id-1]
         

@@ -1,4 +1,4 @@
-const productos = require('../persistencia/memoria');
+const Productos = require('../persistencia/memoria');
 
 class Carrito {
     constructor() {
@@ -31,7 +31,8 @@ class Carrito {
     }
     
     guardar(id) {
-        let prods = productos.listar()
+        let prods = Productos.listar()
+        console.log(prods)
         let productoPorID = prods[id-1]
 
         const infoCarrito = this.carrito
