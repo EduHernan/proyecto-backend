@@ -14,7 +14,6 @@ module.exports = function(passport) {
 
     router.get('/login', (req,res) => {
         if(req.isAuthenticated()) {
-          logger.info(`127.0.0.1 - ${req.user}`)
           console.log(req.user)
             res.render("home", {
                 nombre: req.user.username,
@@ -50,15 +49,15 @@ module.exports = function(passport) {
         //Registro de ingreso por Ethereal
         
         EnviarEthereal(asunto, mensaje, (err, info) => {
-            if(err) console.log(err)
-            // else console.log(info)
+          if(err) console.log(err)
+           else console.log(info)
         })
 
         //Registro de ingreso por Gmail
             
         EnviarGmail(asunto, mensaje, (err, info) => {
             if(err) console.log(err)
-            // else console.log(info)       
+            else console.log(info)       
         })
 
         res.redirect('/') 
@@ -80,6 +79,7 @@ module.exports = function(passport) {
         }
     })
 
+    // ruta de información del servidor
     router.get('/info', (req,res) => {
         res.render('info', {
             args:  JSON.stringify(process.argv,null,'\t'),

@@ -1,5 +1,7 @@
 const Productos = require('../models/mongoProductos');
-// const Orden = require('../models/mongoOrdenCompra');
+// modulos para envio de email
+const EnviarGmail = require('../utils/nodemailer-gmail.js');
+const config = require('../config/config');
 
 class CarritoCrud {
     constructor(carr) {
@@ -7,6 +9,7 @@ class CarritoCrud {
         this.productos = []
     }
 
+    // funciones a utilizar
     getProductos() {
         return this.carrito;
     }
@@ -40,20 +43,31 @@ class CarritoCrud {
             throw error;
         }
     }
-
-    async enviarPedido(id) {
+    // funcion para enviar carrito a la base de datos
+    async enviarPedido() {
         try {
-            let producto = this.productos
-            const email = 'ejemplo@hotmail.com'
-            const direccion = 'bernardo de irigoyen'
+            let producto = JSON.stringify(this.productos)
+            const email = config.EMAIL
+            const direccion = 'Adrogue, Buenos Aires'
             const carro = {
                 email: email,
                 direccion: direccion,
                 productos: producto
             }
-            console.log(carro)
-            const ejemplo = this.carrito.create(carro)
-            return ejemplo
+            const envio = await this.carrito.create(carro)
+            
+            // variables para envio de email
+            let asunto = 'Su orden de compras'
+            let mensaje = 'Felicidades, su compra efectuada en ' 
+            + new Date().toLocaleString() + ' es la siguiente ' + envio
+
+            //Envio de carrito por Gmail
+            
+            EnviarGmail(asunto, mensaje, (err, info) => {
+            if(err) console.log(err)
+            else console.log(info)       
+            })
+            return envio
         } catch (error) {
             throw error;
         }

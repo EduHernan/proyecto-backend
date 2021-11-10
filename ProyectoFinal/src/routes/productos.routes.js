@@ -50,24 +50,30 @@ router.post('/productos/guardarForm', async (req, res) => {
 });
 
 router.put('/productos/actualizar/:id', async (req, res) => {
-    let { id } = req.params
-    let datos = req.body
-    let actualizando = await Persistencia.actualizar(id, datos)
-    res.json(actualizando)
+    try {
+        let { id } = req.params
+        let datos = req.body
+        let actualizando = await Persistencia.actualizar(id, datos)
+        res.json(actualizando)
+    } catch (error) {
+        res.status(500).send(error);
+    }
     
 });
 
 router.delete('/productos/borrar/:id', async (req, res) => {
-    let { id } = req.params;
-    let borrar = await Persistencia.borrar(id)
-    res.json(borrar)
-    
+    try {
+        let { id } = req.params;
+        let borrar = await Persistencia.borrar(id)
+        res.json(borrar)
+    } catch (error) {
+        res.status(500).send(error);
+    }
 });
 
 router.get('/productos/vista', async (req, res) => {
     
     let prods = await Persistencia.listar();
-    
     
     res.render('main', { productos: prods, hayProductos: prods.length });
     

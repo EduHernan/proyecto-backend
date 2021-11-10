@@ -9,7 +9,6 @@ const mongoStore = require('connect-mongo')
  
 // importo modulos de passport 
 const passport = require('passport');
-const LocalStrategy = require('passport-local').Strategy;
  
 // importo socket.io y le pasamos la constante http
 const http = require('http').Server(app);
@@ -18,7 +17,7 @@ const io = require('socket.io')(http);
 // importo modulo de loggers
 const logger = require('./utils/winston');
 
-// load .env configuration
+// modulo de .env configuration
 const config = require('./config/config');
 
 // inicio programa de login de sesión
@@ -46,11 +45,8 @@ app.use(passport.session());
 
 
 // Initialize Passport
-const initPassport = require('./config/initPassport');
+const initPassport = require('./utils/initPassport');
 initPassport(passport);
-
-//importo el modulo de clases
-// const productos = require('./api/mongoDB');
 
 
 // importo modulo de rutas
@@ -76,24 +72,13 @@ app.engine('hbs', handlebars({
     layoutsDir: __dirname + '/views/layouts',
 }));
 const layout = __dirname + '/views'
-// seteo el motor de plantilla
+
 app.set('view engine', 'hbs');
 app.set('views', layout);
 
-//funcion para proteger las rutas del servidor
-function checkAuthentication(req, res, next) {
-    if (req.isAuthenticated()) {
-      //req.isAuthenticated() will return true if user is logged in
-      next();
-    } else {
-      res.render("login");
-    }
-  }
-
-
   // protejo el servidor ante cualquier excepcion no atrapada
 app.use((err, req, res, next) => {
-    console.error(err.message);
+    logger.error(`127.0.0.1 - error en el servidor: ${err.message}`)
     return res.status(500).send('Algo se rompio!');
 });
 
@@ -108,7 +93,6 @@ app.set('host', config.HOST);
 app.set('port', config.PORT);
 
 // pongo a escuchar el servidor en el puerto indicado
-
 const server = app.listen(app.get('port'), async () => {
     logger.info(`127.0.0.1 - [Server] escuchando en ${app.get('host')}:${app.get('port')}`)
     logger.info(`127.0.0.1 - id de salida: ${process.pid}`)
@@ -117,5 +101,5 @@ const server = app.listen(app.get('port'), async () => {
 
 // en caso de error, avisar
 server.on('error', error => {
-    logger.error("127.0.0.1 - error en el servidor:", error)
+    logger.error(`127.0.0.1 - error en servidor: ${error}`)
 });

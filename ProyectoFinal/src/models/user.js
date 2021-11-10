@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 
+// esquema del usuario en la base de datos
 const schema = mongoose.Schema({
     email: { type: String, max: 400 },
     password: {type: String, max: 400},

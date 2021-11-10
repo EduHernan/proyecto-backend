@@ -43,16 +43,19 @@ router.post('/carrito/guardar/:id', async (req, res) => {
     
 });
 
-router.delete('/carrito/borrar/:id', (req, res) => {
-    let { id } = req.params;
-    res.json({estado:'borrado', carrito:carrito.borrar(id), id:req.params.id})
-    
+router.delete('/carrito/borrar/:id', async (req, res) => {
+    try {
+        let { id } = req.params;
+        let borrar = await carrito.borrar(id)
+        res.json(borrar)
+    } catch (error) {
+        res.status(500).send(error);
+    }
 });
 
-router.post('/carrito/enviar/:id', async (req, res) => {
+router.post('/carrito/enviar', async (req, res) => {
     try {
-        let { id } = req.params
-        let pedido = await carrito.enviarPedido(id);
+        let pedido = await carrito.enviarPedido();
         console.log(pedido)
         res.json(pedido);
         

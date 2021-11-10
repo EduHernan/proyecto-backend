@@ -4,6 +4,7 @@ class MongoCRUD {
         this.productos = prod;
     }
 
+    // funciones a utilizar
     getProductos() {
         return this.productos;
     }
@@ -28,10 +29,11 @@ class MongoCRUD {
 
     async listarPorID (condicion) {
         try {
+            
             let mensaje = await this.productos.find({_id:condicion})
             return mensaje;
         } catch (error) {
-            throw error;
+            throw 'No se encontró la id del producto indicada ' + error;
         }
     }
     
@@ -39,6 +41,7 @@ class MongoCRUD {
     async actualizar(id, datos) {
         try {
             let actualizado = await this.productos.update({_id:id}, {$set: {...datos}}, {multi:true})
+            console.log(actualizado)
             return actualizado;
         } catch (error) {
             throw error;

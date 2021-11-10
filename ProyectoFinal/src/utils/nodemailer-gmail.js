@@ -1,19 +1,19 @@
 const nodemailer = require('nodemailer');
-const dotenv = require('dotenv');
-dotenv.config();
+// modulo de .env configuration
+const config = require('../config/config');
 
 const transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
-        user: process.env.GMAIL_USER,
-        pass: process.env.GMAIL_PASS
+        user: config.GMAIL_USER,
+        pass: config.GMAIL_PASS
     }
 });
 
 const enviarMail = (asunto, mensaje, adjunto, to) => {
     const mailOptions = {
         from: 'Servidor Node.js',
-        to: process.env.GMAIL_USER,
+        to: config.EMAIL,
         subject: asunto,
         html: mensaje   
     }
